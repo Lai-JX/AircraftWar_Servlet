@@ -1,1 +1,2 @@
 # AircraftWar_Servlet
+使用前需要配置好Tomcat和mysql数据库
