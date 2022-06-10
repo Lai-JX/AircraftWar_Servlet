@@ -11,6 +11,10 @@
         <servlet-name>HttpServerRegister</servlet-name>
         <servlet-class>com.hitsz.servlet.RegisterServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BattleMode</servlet-name>
+        <servlet-class>com.hitsz.servlet.BattleMode</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HttpServerLogin</servlet-name>
         <url-pattern>/LoginInfo</url-pattern>
@@ -18,5 +22,9 @@
     <servlet-mapping>
         <servlet-name>HttpServerRegister</servlet-name>
         <url-pattern>/RegisterMsg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BattleMode</servlet-name>
+        <url-pattern>/BattleMode</url-pattern>
     </servlet-mapping>
 </web-app>

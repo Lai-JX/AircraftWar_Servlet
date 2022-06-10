@@ -101,6 +101,56 @@ public class UserDao {
         return user;
     }
 
+    public String battleState(String mode,String user){
+        String sql = "select * from battlestate where mode = "+"'"+mode+ "'" + " && user2 = null ";
+
+        Connection  con = JDBCUtils.getConn();
+
+        try {
+            PreparedStatement pst=con.prepareStatement(sql);
+
+            ResultSet rs = pst.executeQuery();
+            // 若已有用户等待，添加用户2
+            while(rs.next()){
+                if(!user.equals(rs.getString(3))){
+                    sql = "select battlestate update set user2 = "+"user"+" user2 = null ";//"update battlestate set user2 = "+"user"+" user2 = null "
+                    con.prepareStatement(sql).executeUpdate();
+                    return new Integer(rs.getInt(1)).toString();
+//                    return "match";// id
+                }
+            }
+            // 无用户在等待
+            sql = "insert into battlestate(id,mode,user1) values (?,?,?)";
+            pst = con.prepareStatement(sql);
+            pst.setString(2,mode);
+            pst.setString(3,user);
+            int value = pst.executeUpdate();
+            if(value>0){
+                return "waiting";
+            }
+
+
+//            boolean isWait = rs.getBoolean(2);
+//            String user1 = rs.getString(3);
+//            String user2 = rs.getString(4);
+//
+//            if(user1.equals(null)){
+//                pst.setString(3,name);
+//            }else if(user2.equals(null)){
+//                pst.setString(4,name);
+//            }
+//            pst.setBoolean(2,!isWait);
+//            return isWait;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            JDBCUtils.close(con);
+        }
+        return "err";
+//        return false;
+    }
+
 
 }
 
