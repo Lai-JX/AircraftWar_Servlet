@@ -53,7 +53,7 @@ public class BattleMode extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        System.out.println("寻求匹配");
+
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
@@ -67,20 +67,44 @@ public class BattleMode extends HttpServlet {
 //        String password = request.getParameter("password");
 //        String name = request.getParameter("name");
         String mode = request.getParameter("mode");
-        String user = request.getParameter("user");
-        System.out.println("mode="+mode + " user=" + user);
+        String username = request.getParameter("username");
+        String action = request.getParameter("action");
+        String id = request.getParameter("id");
+        String life = request.getParameter("life");
+        String score = request.getParameter("score");
+        System.out.println("mode="+mode + " username=" + username);
 
         UserDao dao = new UserDao();
-        String isWait = dao.battleState(mode,user);
-        System.out.println("isWait="+isWait);
+        switch (action){
+            case "match":
+                System.out.println("寻求匹配");
+                String isWait = dao.battleState(mode,username,id);
+                System.out.println("isWait="+isWait);
 
-        if("waiting".equals(isWait)){
-            System.out.println("有对手正在等待匹配");
-            result = "success";
-        }else {
-            // 匹配成功，返回id
-            result = isWait;
+                result = isWait;
+                break;
+            case "cancel":
+                System.out.println("取消匹配");
+                boolean cancelSuccess = dao.battleCancel(username,"id");
+                if(cancelSuccess){
+                    result = "Cancel Success!";
+                }
+                break;
+            case "delete":
+                System.out.println("退出");
+                boolean deleteSuccess = dao.battleCancel(username,"id");
+                if(deleteSuccess){
+                    result = "Delete Success!";
+                }
+                break;
+            case "score":
+                System.out.println("同步得分");
+                result = dao.syncScore(username,id,score,life);
+                break;
+            default:
+                break;
         }
+
 
         out.write(result);
         out.flush();
